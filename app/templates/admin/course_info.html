@@ -1,0 +1,83 @@
+{% extends 'admin/home.html' %}
+{% load static %}
+{% block head %}
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="course-header text-center">
+        <h1 class="mb-3">{{ course.title }}</h1>
+        <div class="price-badge">
+            {% if course.price_type == 'Free' %}
+                Free
+            {% else %}
+                ${{ course.price }}
+            {% endif %}
+        </div>
+    </div>
+</div>
+    <div class="course-media">
+        {% if course.video %}
+        <div class="mt-4 video-container">
+            <video controls class="w-100">
+                <source src="{{ course.video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="course-details-card">
+                <h3 class="mb-4">Course Description</h3>
+                <p>{{ course.description }}</p>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="course-details-card">
+                <h4 class="mb-4">Course Details</h4>
+                
+                <div class="detail-item d-flex">
+                    <span class="detail-label">Duration:</span>
+                    <span>{{ course.total_hours }} hours</span>
+                </div>
+
+                <div class="detail-item d-flex">
+                    <span class="detail-label">Price Type:</span>
+                    <span>{{ course.price_type }}</span>
+                </div>
+
+                <div class="detail-item">
+                    <h5>Trainers</h5>
+                    <ul class="list-unstyled">
+                        {% for trainer in course.trainers.all %}
+                        {{ course.trainers.count }}
+                        {% empty %}
+                        <li class="text-muted">No trainers assigned</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="detail-item">
+                    <h5>Created By</h5>
+                    <p class="mb-0">{{ course.created_by.email }}</p>
+                    <small class="text-muted">{{ course.created_at|date:"F j, Y" }}</small>
+                </div>
+                <div class="action-buttons">
+                    <a href="{% url 'app:course-edit' course.pk %}" class="btn btn-primary">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    
+                    <form method="POST" action="{% url 'app:course-delete' course.pk %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger" 
+                                onclick="return confirm('This will permanently delete the course. Continue?')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

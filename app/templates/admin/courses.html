@@ -1,0 +1,54 @@
+{% extends 'admin/home.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block head %}
+<script src="{% static 'js/main.js' %}"></script>
+{% endblock %}
+{% block content %}
+
+<!-- nav Tab -->
+<nav class="course-nav">
+    <div class="nav-tabs">
+        <button class="nav-tab active" data-target="#view-courses">View Courses</button>
+        <button class="nav-tab" data-target="#ading-course">Add New Course</button>
+    </div>
+</nav>
+
+<!-- view Course Tab -->
+<section class="tab-content active" id="view-courses">
+    <section class="articles">
+        {% for course in courses %}
+        <article>
+            <div class="article-wrapper">
+                <figure>
+                    <img src="{{ course.image.url }}" alt="{{ course.title }}" />
+                </figure>
+                <div class="article-body">
+                    <h2>{{ course.title }}</h2>
+                    <h5>{{ course.price_type }}</h5>
+                    <p>
+                        {{ course.description|truncatechars:80 }}
+                    </p>
+                    <a href="{% url 'app:course-details' course.pk %}" class="read-more">
+                        Read more
+                        <span class="sr-only">about {{ course.title }}</span>
+                    </a>
+                </div> 
+            </div> 
+        </article>
+        {% endfor %}
+    </section>
+</section>
+<!-- Add Course Tab -->
+<section class="course-form tab-content" id="ading-course">
+    <section class="articles-second">
+        <form action="{% url 'app:admin-course' %}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                {% csrf_token %}
+                {{form | crispy}}
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </section>
+</section>
+{% endblock %}

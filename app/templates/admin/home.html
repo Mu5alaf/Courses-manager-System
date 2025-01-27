@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% block head %}{% endblock %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href='{% static "css/main.css" %}' />
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+</head>
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<body class="bg-light">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar text-white">
+                <div class="position-sticky pt-3 nav-menu">
+                    <h4 class="px-3 py-4">Training Manager</h4>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link text-white active" href="{% url 'app:admin-dashboard'%}"
+                                aria-current="page">
+                                📊 Dashboard
+                                <span class="visually-hidden">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item" data-nav-item="courses">
+                            <a class="nav-link text-white" href="{% url 'app:admin-course' %}" data-nav-link>
+                                📚 Courses
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="#" title="Manage Trainers">
+                                👥 Trainers
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="#" tabindex="0">
+                                💰 Payments
+                            </a>
+                        </li>
+                        <li class="nav-item" role="navigation">
+                            <a class="nav-link text-white" href="#reports" role="link">
+                                📈 Reports
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{% url 'app:logout' %}"
+                                onclick="return confirm('Are you sure you want to logout?');">
+                                ⏻ Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                {% block content %}
+                <!-- Dynamic content goes here -->
+                {% endblock %}
+            </main>
+        </div>
+    </div>
+</body>
+</html>
+<script src="{% static 'js/nav.js' %}"></script>
