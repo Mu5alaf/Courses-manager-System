@@ -1,10 +1,12 @@
 {% extends 'admin/home.html' %}
 {% load static %} 
+{% block head %}
+<link rel="stylesheet" type="text/css" href='{% static "css/main.css" %}' />
+{% endblock %}
 {% block content %}
 <div class="content-wrapper">
     <div class="container-fluid">
         <div class="row">
-            <!-- Total Users Card -->
             <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-2 mt-4">
                 <div class="inforide">
                     <div class="row">
@@ -25,13 +27,12 @@
                             <img src="{% static 'images/student.png' %}" alt="My image">
                         </div>
                         <div class="col-lg-9 col-md-8 col-sm-8 col-8 fontsty">
-                            <h4>Total Student</h4>
-                            <h2>{{ student_count }}</h2>
+                            <h4>Total Trainers</h4>
+                            <h2>{{ trainers_count }}</h2>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Total Courses Card -->
             <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-2 mt-4">
                 <div class="inforide">
                     <div class="row">
@@ -45,8 +46,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Total Payments Card -->
             <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-2 mt-4">
                 <div class="inforide">
                     <div class="row">

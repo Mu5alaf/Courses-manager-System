@@ -1,0 +1,61 @@
+{% extends 'admin/home.html' %}
+{% load static %}
+{% block content %}
+{% block head %}
+{% endblock %}
+<section class="payment-details-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title display-5 text-primary">Payment Details</h2>
+        </div>
+        <div class="payment-info-container bg-light p-5 rounded shadow-sm">
+            <h4 class="text-center mb-4">Payment Information for {{ payment.trainer.user.get_full_name|default:payment.trainer.user.email }}</h4>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Payment ID</h5>
+                    <p>{{ payment.id }}</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Course</h5>
+                    <p>{{ payment.course.title }}</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Amount</h5>
+                    <p>${{ payment.amount }}</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Payment Date</h5>
+                    <p>{{ payment.payment_date|date:"Y-m-d" }}</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Status</h5>
+                    {% if payment.status == 'Pending' %}
+                    <h5><span class="badge bg-warning">{{ payment.status }}</span></h5>
+                    {% elif payment.status == 'Paid' %}
+                    <h5><span class="badge bg-success">{{ payment.status }}</span> </h5>
+                    {% elif payment.status == 'Failed' %}
+                    <h5><span class="badge bg-danger">{{ payment.status }}</span> </h5>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <h5>Note</h5>
+                    <p>{{ payment.note|default:"N/A" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <div class="text-center mt-5">
+            <a href="{% url 'app:payments-list' %}" class="btn btn-secondary btn-lg">Back to Payments</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

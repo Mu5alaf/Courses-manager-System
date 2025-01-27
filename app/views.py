@@ -9,7 +9,7 @@ from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
-
+from django.db.models import Q
 from . import forms
 from . import models
 
@@ -88,12 +88,12 @@ def logout_view(request):
 def admin_dashboard(request):
     #dahboard anyltics
     users_count = models.CustomUser.objects.count()
-    student_count = models.TrainerUser.objects.count()
+    trainers_count = models.TrainerUser.objects.count()
     courses_count = models.Course.objects.count()
     payments_count = models.Payment.objects.count()
     context = {
         'users_count': users_count,
-        'student_count': student_count,
+        'trainers_count': trainers_count,
         'courses_count': courses_count,
         'payments_count': payments_count,
     }
@@ -168,6 +168,75 @@ def course_edit(request, pk):
         'form': form,
     }
     return render(request, 'admin/course_edit.html', context)
+
+#trainers list
+@admin_required
+def trainers_view(request):
+    query = request.GET.get('search','').lower()
+    #search querey 
+    trainers = models.TrainerUser.objects.select_related('user').filter(
+    Q(user__first_name__icontains=query) | 
+    Q(user__last_name__icontains=query) | 
+    Q(user__email__icontains=query)
+    )
+    return render(request, 'admin/trainers.html', {'trainers': trainers})
+
+#trainers details
+@admin_required
+def trainer_details_view(request,pk):
+    trainer = get_object_or_404(models.TrainerUser,pk=pk)
+    context = {
+        'trainer':trainer
+    }
+    return render(request, 'admin/trainer_info.html', context)
+
+#trainers delete
+@admin_required
+def trainer_delete(request, pk):
+    trainer = get_object_or_404(models.TrainerUser, pk=pk)
+    if request.method == 'POST':
+        trainer_name = trainer.user.email
+        trainer.user.delete()
+        messages.success(request, f'User "{trainer_name}" deleted successfully')
+        return redirect('app:trainers-list')
+    messages.error(request, 'Invalid request method')
+    return redirect('app:trainers-list', pk=pk)
+
+#add_course to trainer
+@admin_required
+def assign_course_view(request,pk):
+    trainer_assign = get_object_or_404(models.TrainerUser, pk=pk)
+    if request.method == 'POST':
+        form = forms.AssignCourseForm(request.POST)
+        if form.is_valid():
+            selected_courses = form.cleaned_data['courses']
+            trainer_assign.courses.set(selected_courses) 
+            return redirect('app:trainers-list')
+    else:
+        form = forms.AssignCourseForm(initial={'courses': trainer_assign.courses.all()})
+    context = {
+        'trainer_assign': trainer_assign,
+        'form': form, 
+    }
+    return render(request, 'admin/assign_course.html', context)
+
+#payment record
+@admin_required
+def payment_list_view(request):
+    payment_record = models.Payment.objects.all()
+    context = {
+        'payment_record':payment_record,
+    }
+    return render(request, 'admin/payment.html',context)
+
+#payment details
+@admin_required
+def payment_details_view(request,pk):
+    payment = get_object_or_404(models.Payment, pk=pk)
+    context = {
+        'payment':payment
+    }
+    return render(request, 'admin/payment_info.html',context)
 
 '''Trainer Dashboard'''
 @login_required

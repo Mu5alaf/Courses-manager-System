@@ -20,3 +20,10 @@ class CourseForm(forms.ModelForm):
         if not image:
             raise forms.ValidationError("Please upload an image.")
         return image
+
+class AssignCourseForm(forms.Form):
+    courses = forms.ModelMultipleChoiceField(
+        queryset=models.Course.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )

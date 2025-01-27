@@ -1,0 +1,27 @@
+{% extends 'admin/home.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href='{% static "css/main.css" %}' />
+{% endblock %}
+{% block content %}
+<section class="trainer-info-section">
+    <div class="trainer-header">
+        <h2>Trainer Details</h2>
+        <a href="{% url 'app:trainers-list' %}" class="btn btn-primary">Back to Trainers</a>
+    </div>
+    <div class="trainer-details-card">
+        <div class="trainer-image">
+            <img src="{% static 'images/trainer.png' %}"  alt="default-image" />
+        </div>
+        <div class="trainer-info">
+            <h3>{{ trainer.user.get_full_name|default:trainer.user.email }}</h3>
+            <p><strong>Email:</strong> {{ trainer.user.email }}</p>
+            <p><strong>Phone Number:</strong> {{ trainer.phone_number|default:"N/A" }}</p>
+            <p><strong>Hourly Rate:</strong> ${{ trainer.hourly_rate }}</p>
+            <p><strong>About Me:</strong></p>
+            <p>{{ trainer.about_me|default:"No description provided." }}</p>
+            <p><strong>Joined On:</strong> {{ trainer.joined_at|date:"Y-m-d H:i" }}</p>
+        </div>
+    </div>
+{% endblock %}

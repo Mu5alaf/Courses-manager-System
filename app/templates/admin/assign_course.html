@@ -1,0 +1,29 @@
+{% extends 'admin/home.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href='{% static "css/main.css" %}' />
+{% endblock %}
+{% block content %}
+<section class="assign-courses-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title display-5 text-primary">Assign Courses to {{ trainer_assign.user.get_full_name|lower |default:trainer_assign.user.email }}</h2>
+        </div>
+        <div class="form-container bg-light p-4 rounded shadow-sm">
+            <h4 class="text-center mb-4">Select Courses to Assign</h4>
+            <form method="post" class="course-assignment-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form }}
+                </div>
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Save Assignments</button>
+                </div>
+            </form>
+        </div>
+        <div class="text-center mt-5">
+            <a href="{% url 'app:trainers-list' %}" class="btn btn-secondary btn-lg">Back to Trainers</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

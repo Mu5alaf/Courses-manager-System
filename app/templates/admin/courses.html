@@ -13,8 +13,6 @@
         <button class="nav-tab" data-target="#ading-course">Add New Course</button>
     </div>
 </nav>
-
-<!-- view Course Tab -->
 <section class="tab-content active" id="view-courses">
     <section class="articles">
         {% for course in courses %}
@@ -25,7 +23,11 @@
                 </figure>
                 <div class="article-body">
                     <h2>{{ course.title }}</h2>
-                    <h5>{{ course.price_type }}</h5>
+                    {% if course.price_type == 'Paid' %}
+                    <h5 class="badge bg-danger">{{ course.price_type }}</h5>
+                    {% else %}
+                    <h5 class="badge bg-success">{{ course.price_type }}</h5>
+                    {% endif %}
                     <p>
                         {{ course.description|truncatechars:80 }}
                     </p>
@@ -39,7 +41,6 @@
         {% endfor %}
     </section>
 </section>
-<!-- Add Course Tab -->
 <section class="course-form tab-content" id="ading-course">
     <section class="articles-second">
         <form action="{% url 'app:admin-course' %}" method="post" enctype="multipart/form-data">
