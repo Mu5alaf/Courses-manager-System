@@ -73,6 +73,6 @@
 The app will be available at `http://127.0.0.1:8000`.
 
 ---
-### Digram
+# Digram
 
 ![Course_System drawio](https://github.com/user-attachments/assets/69330333-0197-4857-a9b7-37ef8a6ae2cf)
