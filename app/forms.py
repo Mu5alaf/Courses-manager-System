@@ -27,3 +27,14 @@ class AssignCourseForm(forms.Form):
         widget=forms.CheckboxSelectMultiple,
         required=False
     )
+
+class TrainerEditForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=30, required=False)
+    last_name = forms.CharField(max_length=30, required=False)
+
+    class Meta:
+        model = models.TrainerUser
+        fields = ['phone_number', 'about_me']
+        widgets = {
+            'about_me': forms.Textarea(attrs={'rows': 4}),
+        }

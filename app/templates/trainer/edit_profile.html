@@ -1,0 +1,55 @@
+{% extends 'trainer/base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href='{% static "css/main.css" %}' />
+{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="profile-edit-card bg-white p-4 rounded shadow-sm">
+                <h2 class="mb-4">Edit Profile</h2>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="row g-3">
+                        <!-- Name Fields -->
+                        <div class="col-md-6">
+                            <label class="form-label">First Name</label>
+                            {{ form.first_name }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Last Name</label>
+                            {{ form.last_name }}
+                        </div>
+                        
+                        <!-- Phone Number -->
+                        <div class="col-12">
+                            <label class="form-label text-dark">Phone Number</label>
+                            {{ form.phone_number }}
+                            <small class="form-text text-muted">Format: +1234567890</small>
+                        </div>
+                        
+                        <!-- About Me -->
+                        <div class="col-12">
+                            <label class="form-label">About Me</label>
+                            {{ form.about_me }}
+                        </div>
+                    
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="fas fa-save me-2"></i>Save Changes
+                        </button>
+                        <a href="{% url 'app:trainer-dashboard' %}" class="btn btn-outline-secondary ms-2">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

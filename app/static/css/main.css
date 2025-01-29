@@ -408,21 +408,10 @@
         color: #155724;
     }
 
-    .alert-error {
+    .alert.alert-error {
         background: #f8d7da;
         border: 1px solid #f5c6cb;
         color: #721c24;
-    }
-
-    /* Close button */
-    .alert::after {
-        content: '×';
-        position: absolute;
-        right: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        cursor: pointer;
-        font-weight: bold;
     }
 
     /* course Deatils */
@@ -757,7 +746,7 @@
 
     .trainer-image {
         flex: 1;
-        max-width: 318px;
+        max-width: auto;
         padding: 20px;
         background-color: #f0f0f0;
         text-align: center;
@@ -820,3 +809,302 @@
         background-color: #0056b3;
     }
     
+    /* trainer profile */
+    .profile-section {
+        border: 1px solid #e9ecef;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .avatar-container {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8f9fa;
+        border-radius: 50%;
+    }
+    
+    .contact-item {
+        display: flex;
+        align-items: center;
+        padding: 8px 0;
+    }
+    
+    .detail-box {
+        transition: transform 0.2s;
+        height: 100%;
+    }
+    
+    .detail-box:hover {
+        transform: translateY(-3px);
+    }
+    .profile-edit-card {
+        border: 1px solid #dee2e6;
+    }
+    
+    input, textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+    }
+    
+    textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+    
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 4px;
+    }
+
+    /* trainer course */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    h2 {
+        font-size: 2rem;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .card {
+        border-radius: 10px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card-img-top {
+        object-fit: contain;
+        height: 200px;
+    }
+    
+    .card-body {
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .card-title {
+        font-size: 1.25rem;
+        margin-bottom: 15px;
+    }
+    
+    .card-text {
+        color: #6c757d;
+        margin-bottom: 20px;
+    }
+    
+    .badge {
+        font-size: 0.875rem;
+        padding: 6px 12px;
+        border-radius: 12px;
+    }
+    
+    .badge.bg-success {
+        background-color: #28a745;
+    }
+    
+    .badge.bg-primary {
+        background-color: #007bff;
+    }
+    
+    .btn-outline-primary {
+        border: 1px solid #007bff;
+        color: #007bff;
+        transition: background-color 0.3s ease;
+    }
+    
+    .btn-outline-primary:hover {
+        background-color: #007bff;
+        color: white;
+    }
+    
+    .d-grid {
+        display: grid;
+        gap: 10px;
+    }
+    
+    .row-cols-md-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .row-cols-lg-3 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .alert {
+        text-align: center;
+        font-size: 1.125rem;
+    }
+    
+    /* Course Video Player */
+    #video-player {
+        margin-top: 20px;
+    }
+
+    .video-container {
+        position: relative;
+        padding-bottom: 56.25%; 
+        height: 0;
+        overflow: hidden;
+        max-width: 100%;
+        background-color: #000;
+    }
+
+    .video-container video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* style for the emoji popup and background blur */
+    .emoji-popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-30%, -30%);
+        font-size: 5rem;
+        z-index: 1050; 
+        display: none; 
+    }
+
+    .course-container-blur {
+        filter: blur(5px);
+        pointer-events: none; 
+    }
+    
+    .congratulations-user{
+        background-color:#e0a800;
+        border-radius: 20px;
+        position: fixed;
+        top: -50%;
+        left: -2%;
+        transform: translate(-37%, -33%);
+        height: 108px;
+        display: none; 
+        z-index: 1050; 
+        width: 899px;
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 70px;
+        text-align: center;
+        color: #000;
+    }
+
+    /* General styling for the payment section */
+    .payment-section {
+        padding: 30px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 800px;
+        margin: 40px auto;
+    }
+
+    .payment-section h2 {
+        font-size: 28px;
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .course-details {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .course-details h3 {
+        font-size: 24px;
+        color: #007bff;
+    }
+
+    .course-details p {
+        font-size: 16px;
+        color: #555;
+        margin: 10px 0;
+    }
+
+    .payment-details {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .payment-details h4 {
+        font-size: 20px;
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    .payment-details p {
+        font-size: 16px;
+        color: #555;
+    }
+
+    .payment-section .form-group {
+        margin-bottom: 20px;
+    }
+
+    .payment-section .form-group label {
+        font-weight: bold;
+        font-size: 16px;
+        color: #333;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .payment-section .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    .payment-section .form-group textarea {
+        resize: vertical;
+    }
+
+    .payment-section button.btn {
+        padding: 12px 25px;
+        font-size: 18px;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .payment-section button.btn:hover {
+        background-color: #0056b3;
+    }
+
+    .payment-details p strong {
+        color: #28a745;
+    }
+
+    @media (max-width: 768px) {
+        .payment-section {
+            padding: 20px;
+        }
+    }
+

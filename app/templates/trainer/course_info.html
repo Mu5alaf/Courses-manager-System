@@ -1,0 +1,45 @@
+{% extends 'trainer/base.html' %}
+{% load static %}
+{% block head %}
+<script src="{% static 'js/video.js' %}"></script>
+<link rel="stylesheet" type="text/css" href='{% static "css/main.css" %}' />
+{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4">{{ course.title }}</h2>
+    <div class="row">
+        <div class="col-md-4">
+            {% if course.image %}
+            <img src="{{ course.image.url }}" alt="{{ course.title }}" class="img-fluid rounded shadow-sm mb-3">
+            {% endif %}
+            <p class="text-muted">{{ course.description}}</p>
+        </div>        
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Course Video</h5>
+                    <p class="card-text text-muted">Watch the video below:</p>
+                    <div class="video-container">
+                        {% if course.video %}
+                        <video id="video-player-element" controls class="w-100">
+                            <source src="{{ course.video.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        {% else %}
+                        <p class="text-muted">No video available for this course.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="emoji-congratulations" class="emoji-popup" style="display: none;">
+    <h1 class="congratulations-user" id="user-name"> congratulations {{ user.first_name }}</h1>
+    <img src="{% static 'images/finsh.gif' %}" alt="Congratulations" class="img-fluid gif-popup">
+    <form method="POST" action="{% url 'app:update-enrollment-status' pk=enrollment.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Done</button>
+    </form>    
+</div>
+{% endblock %}

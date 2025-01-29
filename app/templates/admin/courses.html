@@ -2,10 +2,10 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block head %}
+<link rel="stylesheet" type="text/css" href='{% static "css/main.css" %}' />
 <script src="{% static 'js/main.js' %}"></script>
 {% endblock %}
 {% block content %}
-
 <!-- nav Tab -->
 <nav class="course-nav">
     <div class="nav-tabs">
@@ -26,10 +26,10 @@
                     {% if course.price_type == 'Paid' %}
                     <h5 class="badge bg-danger">{{ course.price_type }}</h5>
                     {% else %}
-                    <h5 class="badge bg-success">{{ course.price_type }}</h5>
+                    <h5 class="badge bg-warning">{{ course.price_type }}</h5>
                     {% endif %}
                     <p>
-                        {{ course.description|truncatechars:80 }}
+                        {{ course.description|truncatechars:50 }}
                     </p>
                     <a href="{% url 'app:course-details' course.pk %}" class="read-more">
                         Read more

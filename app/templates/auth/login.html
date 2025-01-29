@@ -1,14 +1,12 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-
 <head>
   <title>Login</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet" />
   <meta name="google" content="notranslate" />
   <link rel="stylesheet" type="text/css" href='{% static "css/main.css" %}' />
 </head>
-
 <body>
   <section class="vh-100 gradient-custom">
     <div class="container py-5 h-100">
@@ -40,7 +38,7 @@
                   <div class="alert alert-danger">{{ message }}</div>
                   {% endfor %} {% endif %}
 
-                  <button class="btn btn-outline-light btn-lg px-5" type="submit">
+                  <button class="btn btn-light btn-lg text-dark px-5" type="submit">
                     Login
                   </button>
                 </div>

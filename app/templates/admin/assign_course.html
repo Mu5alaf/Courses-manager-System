@@ -1,5 +1,6 @@
 {% extends 'admin/home.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% block head %}
 <link rel="stylesheet" type="text/css" href='{% static "css/main.css" %}' />
 {% endblock %}
@@ -14,7 +15,7 @@
             <form method="post" class="course-assignment-form">
                 {% csrf_token %}
                 <div class="form-group">
-                    {{ form }}
+                    {{ form | crispy }}
                 </div>
                 <div class="text-center mt-4">
                     <button type="submit" class="btn btn-primary btn-lg btn-block">Save Assignments</button>

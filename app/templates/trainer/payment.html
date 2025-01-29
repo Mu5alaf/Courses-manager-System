@@ -1,0 +1,46 @@
+{% extends 'trainer/base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href='{% static "css/main.css" %}' />
+{% endblock %}
+{% block content %}
+<section class="payment-section">
+    <h2>Course Payment</h2>
+    <div class="course-details">
+        <h3>{{ course.title }}</h3>
+        <p><strong>Description:</strong> {{ course.description }}</p>
+        <p><strong>Price:</strong> 
+            {% if course.price_type == 'Paid' %}
+                ${{ course.price }}
+            {% else %}
+                Free
+            {% endif %}
+        </p>
+    </div>
+    <form method="POST" action="{% url 'app:payment-view' course.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="course_id" value="{{ course.id }}">
+        <input type="hidden" name="trainer_id" value="{{ trainer.id }}">
+        <div class="payment-details">
+            <h4>Payment Information</h4>
+            {% if course.price_type == 'Paid' %}
+                <p><strong>Amount:</strong> ${{ course.price }}</p>
+            {% else %}
+                <p><strong>Amount:</strong> Free</p>
+            {% endif %}
+            <div class="form-group">
+                <label for="payment_method">Payment Method:</label>
+                <select name="payment_method" id="payment_method" class="form-control">
+                    <option value="credit_card">Credit Card</option>
+                    <option value="bank_transfer">Bank Transfer</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="note">Additional Notes (Optional):</label>
+                <textarea name="note" id="note" class="form-control" rows="4"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Pay Now</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

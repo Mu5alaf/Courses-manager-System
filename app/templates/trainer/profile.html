@@ -1,0 +1,69 @@
+{% extends 'trainer/base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href='{% static "css/main.css" %}' />
+{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="profile-header mb-5 text-center">
+        <div class="avatar-container mb-5">
+            <img src="{% static 'images/trainer.png' %}"  alt="default-image" class="rounded-circle bg-dark shadow-4" style="width: 150px;" />
+        </div>
+        <h1 class="mb-1">{{ profile.user.get_full_name }}</h1>
+        <p class="text-muted">Professional Trainer</p>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="profile-section bg-light p-4 rounded">
+                <h4 class="border-bottom pb-2 mb-3">Contact Information</h4>
+                
+                <div class="contact-item mb-3">
+                    <i class="fas fa-envelope me-2 text-primary"></i>
+                    {{ profile.user.email }}
+                </div>
+                
+                {% if profile.phone_number %}
+                <div class="contact-item mb-3">
+                    <i class="fas fa-phone me-2 text-primary"></i>
+                    {{ profile.phone_number }}
+                </div>
+                {% endif %}
+                
+                <div class="contact-item">
+                    <i class="fas fa-dollar-sign me-2 text-primary"></i>
+                    Hourly Rate: <strong>${{ profile.hourly_rate|floatformat:2 }}</strong>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="profile-section bg-light p-4 rounded">
+                <h4 class="border-bottom pb-2 mb-3">About Me</h4>
+                {% if profile.about_me %}
+                    <p class="lead">{{ profile.about_me }}</p>
+                {% else %}
+                    <p class="text-muted fst-italic">No bio provided</p>
+                {% endif %}
+            </div>
+
+            <div class="profile-details mt-4 row">
+                <div class="col-md-6 mb-3">
+                    <div class="detail-box bg-primary text-white p-4 rounded">
+                        <i class="fas fa-calendar-alt fa-2x mb-3"></i>
+                        <h5>Member Since</h5>
+                        <p class="mb-0">{{ profile.joined_at|date:"M Y" }}</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <div class="detail-box bg-secondary text-white p-4 rounded">
+                        <i class="fas fa-clock fa-2x mb-3"></i>
+                        <h5>Last Updated</h5>
+                        <p class="mb-0">{{ profile.updated_at|date:"M d, Y" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

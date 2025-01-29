@@ -69,7 +69,6 @@ class TrainerUser(models.Model):
         full_name = self.user.get_full_name()
         return full_name if full_name.strip() else self.user.email
 
-
 class Course(models.Model):
     class Status(models.TextChoices):
         FREE = 'Free'
@@ -109,9 +108,9 @@ class Enrollment(models.Model):
         IN_PROGRESS = 'In Progress'
         COMPLETED = 'Completed'
         ABANDONED = 'Abandoned'
-    
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    trainer = models.ForeignKey(TrainerUser, on_delete=models.CASCADE)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    course = models.ForeignKey(Course, on_delete=models.SET_NULL,null=True)
+    trainer = models.ForeignKey(TrainerUser, on_delete=models.SET_NULL,null=True)
     status = models.CharField(max_length=25, choices=Status.choices , default=Status.IN_PROGRESS)
     enrolled_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

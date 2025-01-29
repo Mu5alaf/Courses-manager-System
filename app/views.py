@@ -1,4 +1,8 @@
+'''
+@Mu5alaf
+'''
 #django
+from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login , logout
 from django.contrib.auth.decorators import login_required
@@ -7,8 +11,6 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404
 from django.db.models import Q
 from . import forms
 from . import models
@@ -56,25 +58,27 @@ def login_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-
-        # Basic validation
+        #validation
         if not email or not password:
             messages.error(request, "Both email and password are required")
             return redirect('app:login')
-
-        # Authenticate user
+        #authenticate user
         user = authenticate(request, email=email, password=password)
-        
         if user is not None:
-            login(request, user)  # Sets session cookie
+            login(request, user)  
             if user.is_admin:
                 return redirect('app:admin-dashboard')
-            else:
-                return redirect('app:trainer-dashboard')
+                        
+            if not user.is_trainer:
+                messages.error(request, "This account is not authorized as a trainer")
+                return redirect('app:login')
+            
+            return redirect('app:trainer-dashboard')
         else:
             messages.error(request, "Invalid email or password")
-    
+            return redirect('app:login') 
     return render(request, 'auth/login.html')
+
 
 #logout
 def logout_view(request):
@@ -85,7 +89,7 @@ def logout_view(request):
 '''Admin Dashboard'''
 #anylatycis dashboard
 @admin_required
-def admin_dashboard(request):
+def admin_dashboard_view(request):
     #dahboard anyltics
     users_count = models.CustomUser.objects.count()
     trainers_count = models.TrainerUser.objects.count()
@@ -113,7 +117,7 @@ def course_view(request):
             except Exception as e:
                 messages.error(request, f'Error saving course: {str(e)}')
         else:
-            messages.error(request, 'Please correct the errors below.')
+            messages.error(request, 'Please Fill Form Correctly')
     context = {
         'courses': courses,
         'form': form,
@@ -122,7 +126,7 @@ def course_view(request):
 
 #course details
 @admin_required
-def course_details(request, pk):
+def course_details_view(request, pk):
     course = get_object_or_404(models.Course, pk=pk)
     context = {
         'course':course
@@ -131,7 +135,7 @@ def course_details(request, pk):
 
 #course delete
 @admin_required
-def course_delete(request, pk):
+def course_delete_view(request, pk):
     course = get_object_or_404(models.Course, pk=pk)
     if request.method == 'POST':
         course_title = course.title
@@ -143,7 +147,7 @@ def course_delete(request, pk):
 
 #course edite
 @admin_required
-def course_edit(request, pk):
+def course_edit_view(request, pk):
     try:
         course = models.Course.objects.get(pk=pk)
     except models.Course.DoesNotExist:
@@ -192,7 +196,7 @@ def trainer_details_view(request,pk):
 
 #trainers delete
 @admin_required
-def trainer_delete(request, pk):
+def trainer_delete_view(request, pk):
     trainer = get_object_or_404(models.TrainerUser, pk=pk)
     if request.method == 'POST':
         trainer_name = trainer.user.email
@@ -239,7 +243,122 @@ def payment_details_view(request,pk):
     return render(request, 'admin/payment_info.html',context)
 
 '''Trainer Dashboard'''
+#trainer profile
 @login_required
-def trainer_dashboard(request):
-    return render(request, 'trainer/base.html')
+def trainer_dashboard_view(request):
+    try:
+        profile = request.user.trainer_profile
+    except models.TrainerUser.DoesNotExist:
+        #auto create profile if not exist
+        profile = models.TrainerUser.objects.create(user=request.user)
+    context = {'profile': profile}
+    return render(request, 'trainer/profile.html', context)
+#trainer edite profile
+@login_required
+def trainer_edit_view(request):
+    trainer_profile = request.user.trainer_profile
+    if request.method == 'POST':
+        form = forms.TrainerEditForm(request.POST, instance=trainer_profile)
+        if form.is_valid():
+            form.save()
+            user = request.user
+            user.first_name = form.cleaned_data.get('first_name', user.first_name)
+            user.last_name = form.cleaned_data.get('last_name', user.last_name)
+            user.save()
+            messages.success(request, 'Profile updated successfully')
+        return redirect('app:trainer-dashboard')
+    else:
+        initial_data = {
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name,
+        }
+        form = forms.TrainerEditForm(instance=trainer_profile, initial=initial_data)
+    
+    context = {'form': form}
+    return render(request, 'trainer/edit_profile.html', context)
+#trainer course view
+@login_required
+def trainer_course_view(request):
+    trainer = request.user.trainer_profile
+    #enrolled courses
+    enrollments = models.Enrollment.objects.filter(trainer=trainer).select_related('course')
+    context = {
+        'enrollments': enrollments,
+    }
+    return render(request, 'trainer/courses.html', context)
+#trainer course details
+@login_required
+def trainer_course_details_view(request,pk):
+    try:
+        trainer = models.TrainerUser.objects.get(user=request.user)
+    except models.TrainerUser.DoesNotExist:
+        raise ValueError("TrainerUser instance not found for the current user.")
+    course = get_object_or_404(models.Course, id=pk)
+    enrollment = get_object_or_404(models.Enrollment, course=course, trainer=trainer)
+    
+    context = {
+        'course': course,
+        'enrollment': enrollment,
+    }
+    return render(request, 'trainer/course_info.html', context)
+# trainer update status
+@login_required
+def update_enrollment_status_view(request, pk):
+    if request.method == "POST":
+        try:
+            trainer = models.TrainerUser.objects.get(user=request.user)
+        except models.TrainerUser.DoesNotExist:
+            raise ValueError("TrainerUser instance not found for the current user.")
+        enrollment = get_object_or_404(models.Enrollment, pk=pk, trainer=trainer)
+        enrollment.status = models.Enrollment.Status.COMPLETED
+        enrollment.save()
+        messages.success(request, "Congratulations! The course is completed.")
+        return redirect('app:courses-details', pk=enrollment.course.id)
+
+    return redirect('app:courses-details', pk=pk)
+
+#corse store ourchase
+@login_required
+def course_store_view(request):
+    courses = models.Course.objects.all()
+    trainer = models.TrainerUser.objects.get(user=request.user)
+    context = {
+        'courses': courses,
+        'trainer': trainer,
+    }
+    return render(request, 'trainer/store.html', context)
+
+@login_required
+def payment_view(request, pk):
+    course = get_object_or_404(models.Course, id=pk)    
+    if course in request.user.trainer_profile.courses.all():
+        messages.info(request, "You are already enrolled in this course.")
+        return redirect('app:courses-details', pk=course.id)  
+    
+    if request.method == 'POST':
+        amount = course.price if course.price_type == 'Paid' else 0.00
+        #create a payment record
+        payment = models.Payment(
+            trainer=request.user.trainer_profile,
+            course=course,
+            amount=amount,
+            payment_date=timezone.now(), 
+            status=models.Payment.Status.PENDING,
+            note=request.POST.get('note', '')
+        )
+        
+        if course.price_type == 'Paid':
+            payment.status = models.Payment.Status.PAID 
+        else:
+            payment.status = models.Payment.Status.PAID  
+    
+        payment.save()
+        course.trainers.add(request.user.trainer_profile) 
+        messages.success(request, "Payment successful! You are now enrolled in the course.")
+        return redirect('app:courses-details', pk=course.id)
+    context = {
+        'course': course
+    }
+    return render(request, 'trainer/payment.html', context)
+
 
